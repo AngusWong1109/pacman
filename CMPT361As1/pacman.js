@@ -12,6 +12,11 @@ var cBuffer;
 var vPosition;
 var vColor;
 var playerBuffer;
+var player_cell;
+var ghost1_cell;
+var ghost2_cell;
+var treat_cell;
+var obstacle_cell;
 
 var vertices=[
     vec2(  0.9, 0.9),

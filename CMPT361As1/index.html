@@ -4,12 +4,39 @@
         <script id="vertex-shader" type="x-shader/x-vertex">
             attribute vec4 vPosition;
             attribute vec3 color;
-            uniform float x;
-            uniform float y;
             varying vec4 v_color;
+            uniform bool player;
+            uniform bool ghost1;
+            uniform bool ghost2;
+            uniform bool treat;
+            uniform bool obstacle;
+            uniform float theta;
             void main(){
-                gl_Position = vPosition + vec4(x, y, 0, 0);
-                v_color = vec4(color, 1.0);
+                if(treat){
+                    gl_Position.x = cos(theta) * vPosition.x - sin(theta) * vPosition.y;
+                    gl_Position.y = sin(theta) * vPosition.x + cos(theta) * vPosition.y;
+                    gl_Position.z = 0.0;
+                    gl_Position.w = 1.0;
+                    v_color = vec4(0.6745098, 0.61960784, 0.21176471, 1.0);
+                }
+                else{
+                    if(ghost1){
+                        v_color = vec4(0.83529412, 0.34901961, 0.3254902, 1.0);
+                    }
+                    else if(ghost2){
+                        v_color = vec4(0.44313725, 0.78823529, 0.80392157, 1.0);
+                    }
+                    else if(player){
+                        v_color = vec4(0.17647059, 0.22745098, 0.6, 1.0);
+                    }
+                    else if(obstacle){
+                        v_color = vec4(0.28235294, 0.54117647, 0.20392157, 1.0);
+                    }
+                    else{
+                        v_color = vec4(color, 1.0);
+                    }
+                    gl_Position = vPosition;
+                }
             }
         </script>
         <script id="fragment-shader" type="x-shader/x-fragment"> 
@@ -23,12 +50,21 @@
         <script type="text/javascript" src="Common/initShaders.js"></script>
         <script type="text/javascript" src="Common/MV.js"></script>
         <script type="text/javascript" src="pacman.js"></script>
+        
         <link rel = "stylesheet" href="style.css">
     </head>
     <body>
         <div class="canvasContainer">
             
             <canvas id="gl-canvas">Oops ... your browser doesn't support the HTML5 canvas element</canvas>
+
+            <script>
+                var canvas = document.getElementById('canvas');
+                var gl = canvas.getContext('webgl');
+                gl = WebGLDebugUtils.makeDebugContext(gl); // Remove this in production code 
+                
+                console.log(gl.canvas === canvas);
+              </script>
             <div id="timer"></div>
         </div>
     </body>
